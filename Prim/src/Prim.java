@@ -3,7 +3,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 
@@ -17,8 +16,8 @@ public class Prim {
 		try {
 			
 			BufferedReader br = new BufferedReader(new FileReader(name));
-			int tam = Integer.parseInt(br.readLine().split("[ ,\t]")[0]);
-			int[][] matriz = new int[tam][tam];
+			int tam = Integer.parseInt(br.readLine().split("[ ,\t]")[0]);		//Quantidade de vértices
+			int[][] matriz = new int[tam][tam];		//Matriz de pesos
 			String nums = "";
 			int k = 0;
 			
@@ -71,9 +70,9 @@ public class Prim {
 	}
 	
 	public static void mstPrim(int numV, int[][] matrizPesos, int inicial){
-		Vertex[] v = new Vertex[numV];
-		Vertex[] res = new Vertex[numV];
-		Vertex u = null;
+		Vertex[] v = new Vertex[numV];		//Array com os vértices
+		Vertex[] res = new Vertex[numV];	//Array final com os resultados
+		Vertex u = null;		//Variável auxiliar
 		int size = 0;
 		
 		for(int i = 0; i < numV; i++){		//Inicializa os vértices
@@ -82,7 +81,7 @@ public class Prim {
 		
 		v[inicial].valor = 0;		//Atribui zero ao vértice escolhido como inicial
 
-		ArrayList<Vertex> q = buildMinHeap(v.clone());
+		ArrayList<Vertex> q = buildMinHeap(v.clone());		//Controi a primeira árvore heap
 		
 		while ((size = q.size()) != 0){
 			u = q.remove(0);		//Remove o primeiro vertice da lista
@@ -159,5 +158,17 @@ public class Prim {
 		}
 		
 		return vet;
+	}
+}
+
+class Vertex{
+	int id;
+	int valor;
+	Vertex pai;
+	
+	public Vertex(int id, int valor, Vertex pai){
+		this.id = id;
+		this.valor = valor;
+		this.pai = pai;
 	}
 }
