@@ -18,8 +18,13 @@ public class Prim {
 			BufferedReader br = new BufferedReader(new FileReader(name));
 			int tam = Integer.parseInt(br.readLine().split("[ ,\t]")[0]);		//Quantidade de vértices
 			int[][] matriz = new int[tam][tam];		//Matriz de pesos
+			Vertex[] v = new Vertex[tam];
 			String nums = "";
 			int k = 0;
+			
+			for(int i = 0; i < tam; i++){		//Inicializa os vértices
+				v[i]= new Vertex(i,Integer.MAX_VALUE,null);
+			}
 			
 			while(br.ready()){
 				nums += br.readLine()+" ";
@@ -38,6 +43,10 @@ public class Prim {
 						int valor = Integer.parseInt(numeros[k]);
 						matriz[i][j] = valor;
 						matriz[j][i] = valor;
+						if(valor != 0){
+							v[i].adj.add(v[j]);
+							v[j].adj.add(v[i]);
+						}
 						k++;
 					}else{
 						j--;
@@ -58,7 +67,7 @@ public class Prim {
 			System.out.print("Vértice inicial(0 - "+(tam-1)+"): ");
 			int ini = ler.nextInt();
 			
-			mstPrim(tam,matriz,ini);
+			mstPrim(tam,v,matriz,ini);
 			
 			br.close();
 		} catch (FileNotFoundException e) {
@@ -69,15 +78,12 @@ public class Prim {
 		
 	}
 	
-	public static void mstPrim(int numV, int[][] matrizPesos, int inicial){
-		Vertex[] v = new Vertex[numV];		//Array com os vértices
+	public static void mstPrim(int numV, Vertex[] v,int[][] matrizPesos, int inicial){
 		Vertex[] res = new Vertex[numV];	//Array final com os resultados
 		Vertex u = null;		//Variável auxiliar
 		int size = 0;
 		
-		for(int i = 0; i < numV; i++){		//Inicializa os vértices
-			v[i]= new Vertex(i,Integer.MAX_VALUE,null);
-		}
+		
 		
 		v[inicial].valor = 0;		//Atribui zero ao vértice escolhido como inicial
 
@@ -86,13 +92,22 @@ public class Prim {
 		while ((size = q.size()) != 0){
 			u = q.remove(0);		//Remove o primeiro vertice da lista
 			
-			for(int i = 0; i < q.size();i++){
-				//Vê se o vértice retirado possuir ligacação com os restantes da lista e se o peso da aresta é menor que o valor atual do vértice
-				if((matrizPesos[u.id][q.get(i).id] != 0) && (matrizPesos[u.id][q.get(i).id] < q.get(i).valor)){
-					q.get(i).pai = u;		//Atribui o vértice retirado como o novo pai
-					q.get(i).valor = matrizPesos[u.id][q.get(i).id];	//Modifica o valor do vértice pelo peso da aresta correspondente
+//			for(int i = 0; i < q.size();i++){
+//				//Vê se o vértice retirado possuir ligacação com os restantes da lista e se o peso da aresta é menor que o valor atual do vértice
+//				if((matrizPesos[u.id][q.get(i).id] != 0) && (matrizPesos[u.id][q.get(i).id] < q.get(i).valor)){
+//					q.get(i).pai = u;		//Atribui o vértice retirado como o novo pai
+//					q.get(i).valor = matrizPesos[u.id][q.get(i).id];	//Modifica o valor do vértice pelo peso da aresta correspondente
+//				}
+//			}
+			
+			for(int i = 0; i < u.adj.size();i++){
+				//Cofere se o vértice adjacente está no conjunto Q e se o peso da aresta é menor que o valor atual do vértice
+				if((q.contains(u.adj.get(i))) && (matrizPesos[u.id][u.adj.get(i).id] < (u.adj.get(i).valor))){
+					u.adj.get(i).pai = u;		//Atribui o vértice retirado como o novo pai
+					u.adj.get(i).valor = matrizPesos[u.id][u.adj.get(i).id];	//Modifica o valor do vértice pelo peso da aresta correspondente
 				}
 			}
+			
 			
 			q = buildMinHeap(q.toArray(new Vertex[q.size()]));
 			
@@ -165,10 +180,12 @@ class Vertex{
 	int id;
 	int valor;
 	Vertex pai;
+	ArrayList<Vertex> adj;
 	
 	public Vertex(int id, int valor, Vertex pai){
 		this.id = id;
 		this.valor = valor;
 		this.pai = pai;
+		this.adj = new ArrayList<Vertex>();
 	}
 }
