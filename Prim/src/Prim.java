@@ -11,7 +11,6 @@ public class Prim {
 		System.out.print("Digite o caminho do arquivo: ");
 		Scanner ler = new Scanner(System.in);
         String name = ler.nextLine();
-        //name = "D:\\UFPB\\APA\\dij10.txt";
 		
 		try {
 			
@@ -32,11 +31,6 @@ public class Prim {
 			
 			String[] numeros = nums.split("[\td+, d+, \rd+]");
 			
-//			for(int i = 0; i < valores.length; i++){
-//				if(val)
-//					valores.add()
-//			}
-			
 			for(int i = 0; i<tam;i++){
 				for(int j = i+1; j<tam; j++){
 					if(numeros[k].matches("[-+]?\\d*\\.?\\d+")){
@@ -54,15 +48,6 @@ public class Prim {
 					}
 				}
 			}
-			
-			//Print da matriz
-//			for(int i = 0; i<tam;i++){
-//				for(int j = 0; j<tam; j++){
-//					System.out.print(matriz[i][j]+" ");
-//				}
-//				
-//				System.out.println("");
-//			}
 			
 			System.out.print("Vértice inicial(0 - "+(tam-1)+"): ");
 			int ini = ler.nextInt();
@@ -83,8 +68,6 @@ public class Prim {
 		Vertex u = null;		//Variável auxiliar
 		int size = 0;
 		
-		
-		
 		v[inicial].valor = 0;		//Atribui zero ao vértice escolhido como inicial
 
 		ArrayList<Vertex> q = buildMinHeap(v.clone());		//Controi a primeira árvore heap
@@ -92,33 +75,15 @@ public class Prim {
 		while ((size = q.size()) != 0){
 			u = q.remove(0);		//Remove o primeiro vertice da lista
 			
-//			for(int i = 0; i < q.size();i++){
-//				//Vê se o vértice retirado possuir ligacação com os restantes da lista e se o peso da aresta é menor que o valor atual do vértice
-//				if((matrizPesos[u.id][q.get(i).id] != 0) && (matrizPesos[u.id][q.get(i).id] < q.get(i).valor)){
-//					q.get(i).pai = u;		//Atribui o vértice retirado como o novo pai
-//					q.get(i).valor = matrizPesos[u.id][q.get(i).id];	//Modifica o valor do vértice pelo peso da aresta correspondente
-//				}
-//			}
-			
 			for(int i = 0; i < u.adj.size();i++){
-				//Cofere se o vértice adjacente está no conjunto Q e se o peso da aresta é menor que o valor atual do vértice
+				//Confere se o vértice adjacente está no conjunto Q e se o peso da aresta é menor que o valor atual do vértice
 				if((q.contains(u.adj.get(i))) && (matrizPesos[u.id][u.adj.get(i).id] < (u.adj.get(i).valor))){
 					u.adj.get(i).pai = u;		//Atribui o vértice retirado como o novo pai
 					u.adj.get(i).valor = matrizPesos[u.id][u.adj.get(i).id];	//Modifica o valor do vértice pelo peso da aresta correspondente
 				}
 			}
 			
-			
 			q = buildMinHeap(q.toArray(new Vertex[q.size()]));
-			
-			//q = new ArrayList<Vertex>(Arrays.asList(minHeapfy(q.toArray(new Vertex[q.size()]),q.size(),0)));	//
-			
-//			for(int i = 0; i < q.size(); i++){
-//				
-//				System.out.println(q.get(i).id+"   "+q.get(i).valor);
-//			}
-			
-			//System.out.println("");
 			
 			res[numV - size] = u;		//Guarda os vértices já acessados
 		}
